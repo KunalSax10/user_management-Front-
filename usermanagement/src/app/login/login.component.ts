@@ -14,13 +14,14 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.LoginForm = this.formbuilder.group({
-      Email: [null, [Validators.required, Validators.email]],
+      Email: [null, [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       Password: [null, [Validators.required]]
     })
   }
 
   @ViewChild('myModal') myModal!: ElementRef;
   openModal() {
+    this.LoginForm.reset()
     const modal = this.myModal.nativeElement;
     modal.classList.add('show');
     modal.style.display = 'block';
@@ -34,10 +35,10 @@ export class LoginComponent implements OnInit {
     modal.removeAttribute('aria-modal');
   }
 
-  SubmitLoginForm(){
-    if(this.LoginForm.valid){
+  SubmitLoginForm() {
+    if (this.LoginForm.valid) {
 
-    }else{
+    } else {
       this.LoginForm.markAllAsTouched
     }
   }

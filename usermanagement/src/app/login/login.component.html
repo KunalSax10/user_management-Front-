@@ -1,37 +1,52 @@
 <nav class="navbar navbar-light bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Nav</a>
-        <button class="btn btn-outline-light" (click)="openModal()">Login</button>
-    </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Nav</a>
+    <button class="btn btn-outline-light" (click)="openModal()">Login</button>
+  </div>
 </nav>
 
-<form [formGroup]="LoginForm" class="modal fade" data-backdrop="static" data-keyboard="false" #myModal tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Login</h4>
-          <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="email">Email<span class="text-danger">*</span></label>
-              <input type="email" class="form-control" formControlName="Email" id="email" placeholder="Enter email">
+<form [formGroup]="LoginForm" class="modal fade" data-backdrop="static" data-keyboard="false" #myModal tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Login</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="Password">Email<span class="text-danger">*</span></label>
+            <input type="Password" class="form-control" formControlName="Email" id="Password"
+              placeholder="Enter Password"
+              [class.is-invalid]="LoginForm.controls['Email'].invalid && (LoginForm.controls['Email'].dirty || LoginForm.controls['Email'].touched)">
+            <div
+              *ngIf="LoginForm.controls['Email'].invalid && (LoginForm.controls['Email'].dirty || LoginForm.controls['Email'].touched)"
+              class="text-danger">
+              <div *ngIf="LoginForm.controls['Email'].errors?.['required']">Email is required</div>
+              <div *ngIf="LoginForm.controls['Email'].errors?.['pattern']">Enter valid email </div>
             </div>
-            <div class="form-group">
-              <label for="password">Password<span class="text-danger">*</span></label>
-              <input type="password" class="form-control" formControlName="Password" id="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label for="password">Password<span class="text-danger">*</span></label>
+            <input type="password" class="form-control" formControlName="Password" id="password" placeholder="Password"
+              [class.is-invalid]="LoginForm.controls['Password'].invalid && (LoginForm.controls['Password'].dirty || LoginForm.controls['Password'].touched)">
+            <div
+              *ngIf="LoginForm.controls['Password'].invalid && (LoginForm.controls['Password'].dirty || LoginForm.controls['Password'].touched)"
+              class="text-danger">
+              <div *ngIf="LoginForm.controls['Password'].errors?.['required']">Password is required
+              </div>
             </div>
-            
-          </form>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-secondary">Reset</button>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn btn-primary">Login</button>
       </div>
     </div>
+  </div>
 </form>
-  

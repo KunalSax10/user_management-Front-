@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
       fullName: [null, Validators.required],
       email: [null, [Validators.required, Validators.email]],
       role: [null, [Validators.required]],
-      address:[null],
+      address: [null],
       mobileNo: [null, [Validators.required]],
       password: [null, [Validators.required]],
     })
@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('myModal') myModal!: ElementRef;
   openModal() {
+    this.userForm.reset()
     const modal = this.myModal.nativeElement;
     modal.classList.add('show');
     modal.style.display = 'block';
