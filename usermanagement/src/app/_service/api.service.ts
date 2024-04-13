@@ -89,11 +89,8 @@ export class ApiService {
 
       const headers = new HttpHeaders(Header);
 
-      // ReqBody.append('RoleID', user_info['RoleID']);
-      let EncryptBody = { 'Request': ReqBody }
-      // let EncryptBody = ReqBody
 
-      return this.http.post<any>(environment.apiUrl + ServiceName, EncryptBody, { headers: headers })
+      return this.http.post<any>(environment.apiUrl + ServiceName, {})
         .pipe(map(
           data => {
             const ApiResponce = (data['Response']);
