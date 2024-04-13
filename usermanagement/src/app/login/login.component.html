@@ -18,9 +18,9 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label for="Password">Email<span class="text-danger">*</span></label>
-            <input type="Password" class="form-control" formControlName="Email" id="Password"
-              placeholder="Enter Password"
+            <label for="Email">Email<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="Email" id="Email"
+              placeholder="Enter Email  "
               [class.is-invalid]="LoginForm.controls['Email'].invalid && (LoginForm.controls['Email'].dirty || LoginForm.controls['Email'].touched)">
             <div
               *ngIf="LoginForm.controls['Email'].invalid && (LoginForm.controls['Email'].dirty || LoginForm.controls['Email'].touched)"
@@ -45,7 +45,7 @@
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-secondary">Reset</button>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary" (click)="SubmitLoginForm()">Login</button>
       </div>
     </div>
   </div>

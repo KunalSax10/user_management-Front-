@@ -1,5 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs';
+import { ApiService } from '../_service/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +11,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   LoginForm!: FormGroup
-  constructor(private formbuilder: FormBuilder
-
+  constructor(private formbuilder: FormBuilder,
+private ApiService : ApiService,
+private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -37,9 +41,23 @@ export class LoginComponent implements OnInit {
 
   SubmitLoginForm() {
     if (this.LoginForm.valid) {
-
+      let request = {
+        Email: this.LoginForm.get('Email')?.value,
+        Password: this.LoginForm.get('Password')?.value,
+      };    
+      this.ApiService.Login(request)
+        .pipe(first())
+        .subscribe((result:any) => { // Adjust to the correct response type
+          console.log(result);
+          if (result && result.status === '1'){
+            alert(result.message);
+            this.router.navigate(['/home'])
+          }
+        });
     } else {
-      this.LoginForm.markAllAsTouched
+      this.LoginForm.markAllAsTouched();
     }
   }
+  
+  
 }

@@ -65,7 +65,7 @@ export class ApiService {
    * @param isForm isForm
    * @returns response
    */
-  CallService(ServiceName: string, ReqBody: any = {}) {
+  CallService(ServiceName: string, ReqBody: any = {}):any {
     try {
       const allServiceName = ['/Login'];
       let Header = {};
@@ -87,16 +87,15 @@ export class ApiService {
         ReqBody.Token = Token;
       }
 
-      const headers = new HttpHeaders(Header);
 
       // ReqBody.append('RoleID', user_info['RoleID']);
       let EncryptBody = { 'Request': ReqBody }
       // let EncryptBody = ReqBody
 
-      return this.http.post<any>(environment.apiUrl + ServiceName, EncryptBody, { headers: headers })
+      return this.http.post<any>(environment.apiUrl + ServiceName, EncryptBody, {})
         .pipe(map(
           data => {
-            const ApiResponce = (data['Response']);
+            const ApiResponce = data;
             if (ApiResponce?.status == "2") {
               // this.alert.sweetAlert(ApiResponce['message'], "error");
               setTimeout(() => {
@@ -143,7 +142,7 @@ export class ApiService {
       ).pipe(
         map(data => {
           // Decrypt the response data
-          const ApiResponse = (data['Response']);
+          const ApiResponse = data;
 
           // Check if the status is not "1" and handle accordingly
           if (ApiResponse?.status !== "1") {
@@ -160,44 +159,27 @@ export class ApiService {
 
 
 
-
-
-  /**
-     * Login page
-     * @param username inputed username
-     * @param password inputed password
-     * @param source inputed source
-     * @param ip inputed ip
-     * @param remember inputed remember flag
-     * @param logintype inputed login type
-     * @returns 
-     */
-  Login(ReqBody: any = {}) {
+  Login(ReqBody: any = {}): any {
     try {
-
-      const UserName = ReqBody.username;
-      const password = ReqBody.password;
-      const ip = ReqBody.ip;
+      const Email = ReqBody.Email;
+      const Password = ReqBody.Password;
       const Token = 'rvEDFrqRzbMLnB7em37krR35b16M5z1x0z/O9EoAmOw=';
-
-      // Define your headers
-      const Headers = {
-        ...this.Headers,
-        secret: Token
-      }
-      const headers = new HttpHeaders(Headers);
-
       const body = {
-        EmailId: UserName,
-        Password: password,
-        Ip: ip,
+        Email: Email,
+        Password: Password,
         Token: Token
       };
-
-      return this.http.post<any>(environment.apiUrl + '/Login', { headers: headers })
+  
+     // console.log('Making login request with body:', body); // Add this log
+  
+      return this.http.post<any>(environment.apiUrl + '/Login', body, {})
         .pipe(map(data => {
-          const LoginResponce = (data['Response']);
+         // console.log('Login response:', data); // Add this log
+          const LoginResponce = data;
+          console.log(LoginResponce);
           if (LoginResponce?.status == "1") {
+           
+            
             const LoginData = LoginResponce?.data;
             const Token = LoginResponce?.token;
             const localStore = {
@@ -208,12 +190,11 @@ export class ApiService {
           }
           return LoginResponce;
         }));
-    }
-    catch (error) {
+    } catch (error) {
+      console.error('Error in login request:', error); // Add this log
       return error;
     }
   }
-
-
+  
 
 }
