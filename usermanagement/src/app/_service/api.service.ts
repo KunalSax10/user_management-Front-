@@ -41,7 +41,7 @@ export class ApiService {
     if (typeof window !== 'undefined' && window.localStorage) {
       const LoginData = localStorage.getItem('lgusr');
       if (LoginData) {
-        let userdata: any = LoginData;
+        let userdata: any = JSON.parse(LoginData);
 
         if (userdata == 0) {
           localStorage.removeItem('loginUser');
@@ -68,37 +68,29 @@ export class ApiService {
   CallService(ServiceName: string, ReqBody: any = {}): any {
     try {
       const allServiceName = ['/Login'];
-      let Header = {};
 
       if (!allServiceName.includes(ServiceName)) {
-
-        Header = {
-          ...this.Headers,
-          secret: this.UserSession.Token
-        }
         ReqBody.Token = this.UserSession.Token;
         ReqBody.UserId = this.UserSession.UserId;
+        ReqBody.Role = this.UserSession.Role;
       } else {
         const Token = 'rvEDFrqRzbMLnB7em37krR35b16M5z1x0z/O9EoAmOw=';
-        Header = {
-          ...this.Headers,
-          secret: Token
-        }
         ReqBody.Token = Token;
       }
+      console.log(ReqBody);
+      console.log(this.UserSession);
 
-      let EncryptBody = { 'Request': ReqBody }
 
-      return this.http.post<any>(environment.apiUrl + ServiceName, EncryptBody, {})
+      return this.http.post<any>(environment.apiUrl + ServiceName, ReqBody)
         .pipe(map(
           data => {
             const ApiResponce = data;
             if (ApiResponce?.status == "2") {
               // this.alert.sweetAlert(ApiResponce['message'], "error");
-              setTimeout(() => {
-                localStorage.removeItem('loginUser');
-                window.location.href = '/';
-              }, 1000);
+              // setTimeout(() => {
+              //   localStorage.removeItem('loginUser');
+              //   window.location.href = '/';
+              // }, 1000);
             }
             return ApiResponce;
           }));
@@ -116,7 +108,7 @@ export class ApiService {
    * @param isForm isForm
    * @returns response
    */
-  FileUpload(ServiceName: string, ReqBody: any = {}, FormReqBody: any = {}) {
+  FileUpload(ServiceName: string, ReqBody: any = {}, FormReqBody: any = {}): any {
     try {
       // Add necessary headers, including the secret token from user session
       const Header = {
@@ -168,22 +160,19 @@ export class ApiService {
       };
 
       // console.log('Making login request with body:', body); // Add this log
-
       return this.http.post<any>(environment.apiUrl + '/Login', body, {})
         .pipe(map(data => {
           // console.log('Login response:', data); // Add this log
           const LoginResponce = data;
-          console.log(LoginResponce);
           if (LoginResponce?.status == "1") {
-
-
             const LoginData = LoginResponce?.data;
-            const Token = LoginResponce?.token;
+            const Token = LoginResponce?.Token;
             const localStore = {
               ...LoginData,
               "Token": Token
             }
-            localStorage.setItem('lgusr', localStore);
+
+            localStorage.setItem('lgusr', JSON.stringify(localStore));
           }
           return LoginResponce;
         }));
