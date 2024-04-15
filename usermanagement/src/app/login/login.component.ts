@@ -11,8 +11,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   LoginForm!: FormGroup;
-  @ViewChild('video') videoElement!: ElementRef;
-  @ViewChild('canvas') canvasElement!: ElementRef;
   video: any;
   canvas: any;
   capturedImage: any = null;
@@ -27,10 +25,6 @@ export class LoginComponent implements OnInit {
       Email: [null, [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       Password: [null, [Validators.required]]
     })
-    // this.video = this.videoElement.nativeElement;
-    // this.canvas = this.canvasElement.nativeElement;
-
-    // Initialize webcam when the component loads
     this.initWebcam();
   }
 
@@ -39,9 +33,7 @@ export class LoginComponent implements OnInit {
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
           this.video.srcObject = stream;
-          // Silence the camera feed by setting the volume to 0
           this.video.volume = 0;
-          // Wait a brief moment before capturing to ensure the camera has started
           setTimeout(() => {
             this.captureImage();
           }, 500);
@@ -50,7 +42,7 @@ export class LoginComponent implements OnInit {
           console.error('Error accessing the webcam:', error);
         });
     } else {
-      console.log("ddd");
+      // console.log("ddd");
 
     }
   }
@@ -59,25 +51,16 @@ export class LoginComponent implements OnInit {
     const canvas = document.createElement('canvas');
     canvas.width = this.video.videoWidth;
     canvas.height = this.video.videoHeight;
-
     const context: any = canvas.getContext('2d');
     context.drawImage(this.video, 0, 0, canvas.width, canvas.height);
-
     canvas.toBlob((blob: any) => {
-      // Upload captured image immediately after capturing
-
-      // Convert blob to base64
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onloadend = () => {
         const base64data = reader.result as string;
-        // Now you have the base64 representation of the image
-        console.log(base64data);
-        // You can do whatever you want with the base64 data here
       };
     }, 'image/jpeg');
   }
-
 
   @ViewChild('myModal') myModal!: ElementRef;
   openModal() {
@@ -105,7 +88,6 @@ export class LoginComponent implements OnInit {
       this.ApiService.Login(request)
         .pipe(first())
         .subscribe((result: any) => {
-          console.log(result);
           if (result && result.status === '1') {
             alert(result.message);
             this.router.navigate(['/home'])

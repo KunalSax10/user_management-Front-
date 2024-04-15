@@ -24,16 +24,12 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    // private loader: LoaderService,
-    // private encryptService: LoginService,
 
   ) {
     let loginUser: any;
     if (typeof localStorage !== 'undefined') {
       loginUser = localStorage.getItem('loginUser');
     }
-    // this.currentUserSubject = new BehaviorSubject<LoginUser>(this.DecryptObject(loginUser));
-    // this.currentUser = this.currentUserSubject.asObservable();
   }
 
   /**Get User Session data */
@@ -97,50 +93,40 @@ export class ApiService {
   }
 
 
-  /**
-   * CallService
-   * @param ServiceName ServiceName
-   * @param ReqBody ReqBody
-   * @param isForm isForm
-   * @returns response
-   */
-  FileUpload(ServiceName: string, ReqBody: any = {}, FormReqBody: any = {}): any {
-    try {
-      // Add necessary headers, including the secret token from user session
-      const Header = {
-        ...this.Headers,
-        secret: this.UserSession.Token
-      }
-      const headers = new HttpHeaders(Header);
+  // /**
+  //  * CallService
+  //  * @param ServiceName ServiceName
+  //  * @param ReqBody ReqBody
+  //  * @param isForm isForm
+  //  * @returns response
+  //  */
+  // FileUpload(ServiceName: string, ReqBody: any = {}, FormReqBody: any = {}): any {
+  //   try {
+  //     const Header = {
+  //       ...this.Headers,
+  //       secret: this.UserSession.Token
+  //     }
+  //     const headers = new HttpHeaders(Header);
+  //     ReqBody.Token = this.UserSession.Token;
+  //     ReqBody.UserId = this.UserSession.UserId;
+  //     FormReqBody.append('Request', ReqBody);
+  //     return this.http.post<any>(
+  //       environment.apiUrl + ServiceName,
+  //       FormReqBody,
+  //       { headers: headers }
+  //     ).pipe(
+  //       map(data => {
+  //         const ApiResponse = data;
+  //         if (ApiResponse?.status !== "1") {
+  //         }
 
-      // Add common properties to the request body
-      ReqBody.Token = this.UserSession.Token;
-      ReqBody.UserId = this.UserSession.UserId;
-
-      // If FormReqBody is not empty, append encrypted ReqBody to it
-      FormReqBody.append('Request', ReqBody);
-      // Make the POST request using HttpClient
-      return this.http.post<any>(
-        environment.apiUrl + ServiceName,
-        FormReqBody,
-        { headers: headers }
-      ).pipe(
-        map(data => {
-          // Decrypt the response data
-          const ApiResponse = data;
-
-          // Check if the status is not "1" and handle accordingly
-          if (ApiResponse?.status !== "1") {
-            // Handle error (e.g., show alerts, redirect, etc.)
-          }
-
-          return ApiResponse;
-        })
-      );
-    } catch (error) {
-      return error;
-    }
-  }
+  //         return ApiResponse;
+  //       })
+  //     );
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
 
 
 
@@ -155,7 +141,6 @@ export class ApiService {
         Token: Token
       };
 
-      // console.log('Making login request with body:', body); // Add this log
       return this.http.post<any>(environment.apiUrl + '/Login', body, {})
         .pipe(map(data => {
           // console.log('Login response:', data); // Add this log

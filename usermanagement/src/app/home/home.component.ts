@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.ApiService.UserSession.Role);
     this.ApiService.UserSession
     this.Role = this.ApiService.UserSession.Role;
     this.UserName = this.ApiService.UserSession.FullName;
@@ -67,7 +66,6 @@ export class HomeComponent implements OnInit {
 
   GetUserList() {
     this.ApiService.CallService('/UserList').pipe(first()).subscribe((result: any) => {
-      console.log(result)
       this.UserList = result.List;
     })
   }
