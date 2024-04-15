@@ -62,7 +62,6 @@ export class ApiService {
    * CallService
    * @param ServiceName ServiceName
    * @param ReqBody ReqBody
-   * @param isForm isForm
    * @returns response
    */
   CallService(ServiceName: string, ReqBody: any = {}): any {
@@ -77,9 +76,6 @@ export class ApiService {
         const Token = 'rvEDFrqRzbMLnB7em37krR35b16M5z1x0z/O9EoAmOw=';
         ReqBody.Token = Token;
       }
-      console.log(ReqBody);
-      console.log(this.UserSession);
-
 
       return this.http.post<any>(environment.apiUrl + ServiceName, ReqBody)
         .pipe(map(
@@ -87,10 +83,10 @@ export class ApiService {
             const ApiResponce = data;
             if (ApiResponce?.status == "2") {
               // this.alert.sweetAlert(ApiResponce['message'], "error");
-              // setTimeout(() => {
-              //   localStorage.removeItem('loginUser');
-              //   window.location.href = '/';
-              // }, 1000);
+              setTimeout(() => {
+                localStorage.removeItem('loginUser');
+                window.location.href = '/';
+              }, 1000);
             }
             return ApiResponce;
           }));

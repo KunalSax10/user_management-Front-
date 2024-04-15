@@ -1,16 +1,20 @@
-
 <nav class="navbar navbar-light bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Nav</a>
-        <button class="btn btn-outline-light" (click)="openModal()">Create User</button>
+        <div>
+            <button class="btn btn-outline-light" (click)="openModal()" *ngIf="Role == 'Admin'">Create User</button>
+            &nbsp;
+            <button type="button" class="btn btn-outline-light" (click)="logout()">Logout</button>
+        </div>
     </div>
 </nav>
 
-<form [formGroup]="userForm" class="modal fade" #myModal tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form [formGroup]="userForm" class="modal fade" #myModal tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Create User</h4>
+                <h4 class="modal-title">{{FormHeading}}</h4>
                 <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,17 +24,37 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="fullName">First Name<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="FirstName" id="fullName" placeholder="Enter Full Name">
+                            <input type="text" class="form-control" formControlName="FirstName" id="fullName"
+                                placeholder="Enter Full Name"
+                                [class.is-invalid]="userForm.controls['FirstName'].invalid && (userForm.controls['FirstName'].dirty || userForm.controls['FirstName'].touched)">
+                            <div *ngIf="userForm.controls['FirstName'].invalid && (userForm.controls['FirstName'].dirty || userForm.controls['FirstName'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['FirstName'].errors?.['required']">FirstName is required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="mobileNo">Mobile Number<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="Mobile" id="mobileNo" placeholder="Enter Mobile Number">
+                            <input type="text" class="form-control" formControlName="Mobile" id="mobileNo"
+                                placeholder="Enter Mobile Number"
+                                [class.is-invalid]="userForm.controls['Mobile'].invalid && (userForm.controls['Mobile'].dirty || userForm.controls['Mobile'].touched)">
+                            <div *ngIf="userForm.controls['Mobile'].invalid && (userForm.controls['Mobile'].dirty || userForm.controls['Mobile'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['Mobile'].errors?.['required']">Mobile is required</div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="email">Email<span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" formControlName="Email" id="email" placeholder="Enter email">
+                            <input type="email" class="form-control" formControlName="Email" id="email"
+                                placeholder="Enter Email"
+                                [class.is-invalid]="userForm.controls['Email'].invalid && (userForm.controls['Email'].dirty || userForm.controls['Email'].touched)">
+                            <div *ngIf="userForm.controls['Email'].invalid && (userForm.controls['Email'].dirty || userForm.controls['Email'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['Email'].errors?.['required']">Email is required</div>
+                                <div *ngIf="userForm.controls['Email'].errors?.['pattern']">Enter valid email </div>
+                            </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="role">Role<span class="text-danger">*</span></label>
                             <select class="form-control" formControlName="Role" id="role" placeholder="Select Role">
@@ -38,25 +62,51 @@
                                 <option value="Supervisor">Supervisor</option>
                                 <option value="Worker">Worker</option>
                             </select>
+                            <div *ngIf="userForm.controls['Role'].invalid && (userForm.controls['Role'].dirty || userForm.controls['Role'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['Role'].errors?.['required']">Role is required
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="LastName">Last Name<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="LastName" id="LastName" placeholder="Enter Full Name">
+                            <input type="text" class="form-control" formControlName="LastName" id="LastName"
+                                placeholder="Enter Last Name" [class.is-invalid]="userForm.controls['LastName'].invalid &&
+                                (userForm.controls['LastName'].dirty || userForm.controls['LastName'].touched)">
+                            <div *ngIf="userForm.controls['LastName'].invalid && (userForm.controls['LastName'].dirty || userForm.controls['LastName'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['LastName'].errors?.['required']">LastName is required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="address">Address<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="Address" id="address" placeholder="Enter Address">
+                            <input type="text" class="form-control" formControlName="Address" id="address"
+                                placeholder="Enter Address" [class.is-invalid]="userForm.controls['Address'].invalid &&
+                                (userForm.controls['Address'].dirty || userForm.controls['Address'].touched)">
+                            <div *ngIf="userForm.controls['Address'].invalid && (userForm.controls['Address'].dirty || userForm.controls['Address'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['Address'].errors?.['required']">Address is required
+                                </div>
+                            </div>
                         </div>
-                      
                         <div class="form-group">
                             <label for="password">Password<span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" formControlName="Password" id="password" placeholder="Password">
+                            <input type="password" class="form-control" formControlName="Password" id="password"
+                                placeholder="Password" [class.is-invalid]="userForm.controls['Password'].invalid &&
+                                (userForm.controls['Password'].dirty || userForm.controls['Password'].touched)">
+                            <div *ngIf="userForm.controls['Password'].invalid && (userForm.controls['Password'].dirty || userForm.controls['Password'].touched)"
+                                class="text-danger">
+                                <div *ngIf="userForm.controls['Password'].errors?.['required']">Password is required
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="Gender">Gender<span class="text-danger">*</span></label>
-                            <select class="form-control" formControlName="Gender" id="Gender" placeholder="Select Gender">
+                            <select class="form-control" formControlName="Gender" id="Gender"
+                                placeholder="Select Gender">
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                                 <option value="Other">Other</option>
@@ -67,42 +117,49 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-secondary" (click)="resetForm()">Reset</button>
-                <button type="submit" class="btn btn-primary" (click)="submitForm()">Register</button>
+                <button type="submit" class="btn btn-primary" (click)="submitForm()">{{FormButton}}</button>
             </div>
         </div>
     </div>
 </form>
 
-<div class="container">       
+<div class="card pl-5 mb-2 mt-2 mx-auto" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title">Hello {{UserName}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Your position is {{Role}} </h6>
+        <p class="card-text">Welcome to your dashboard</p>
+    </div>
+</div>
+
+<div class=" container" *ngIf="Role === 'Admin' || Role === 'Supervisor'">
     <table class="table">
-      <thead>
-        <tr>
-          <th>Action</th>
-          <th>Full Name</th>
-          <th>Address</th>
-          <th>Mobile No</th>
-          <th>Role</th>
-          <th>Gender</th>
-          <th>Email</th>
-          <th>Password</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of UserList; let i = index">
-            <td>
-                <i class="fa fa-edit" (click)="editUser(data.UserId)"></i>
-                <span class="icon-space"></span> <!-- Add space here -->
-                <i class="fa fa-trash-o" (click)="deleteUser(data.UserId)"></i>
-            </td>
-          <td>{{data.FullName}}</td>
-          <td>{{data.Address}}</td>
-          <td>{{data.Mobile}}</td>
-          <td>{{data.Role}}</td>
-          <td>{{data.Gender}}</td>
-          <td>{{data.Email}}</td>
-          <td>{{data.Password}}</td>
-        </tr>
-      </tbody>
+        <thead>
+            <tr>
+                <th *ngIf="Role === 'Admin'">Action</th>
+                <th>Full Name</th>
+                <th>Address</th>
+                <th>Mobile No</th>
+                <th>Role</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of UserList; let i = index">
+                <td *ngIf="Role === 'Admin'">
+                    <i class="fa fa-edit" (click)="editUser(i)"></i>
+                    <span class="icon-space"></span>
+                    <i class="fa fa-trash-o" (click)="deleteUser(data.UserId)"></i>
+                </td>
+                <td>{{data.FullName}}</td>
+                <td>{{data.Address}}</td>
+                <td>{{data.Mobile}}</td>
+                <td>{{data.Role}}</td>
+                <td>{{data.Gender}}</td>
+                <td>{{data.Email}}</td>
+                <td>{{data.Password}}</td>
+            </tr>
+        </tbody>
     </table>
-  </div>
-  
+</div>

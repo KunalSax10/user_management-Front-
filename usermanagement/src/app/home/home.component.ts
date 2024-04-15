@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../_service/api.service';
 import { first } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +12,21 @@ import { first } from 'rxjs';
 export class HomeComponent implements OnInit {
   userForm!: FormGroup;
   UserList: any[] = [];
-
+  Role: any;
+  UserUpdate: any;
+  UserName: any;
+  FormHeading = 'Add User';
+  FormButton = 'Save';
   constructor(private formbuilder: FormBuilder,
-    private ApiService: ApiService
+    private ApiService: ApiService, private router: Router
   ) { }
+
+
   ngOnInit(): void {
-    console.log(this.ApiService.UserSession);
+    console.log(this.ApiService.UserSession.Role);
+    this.ApiService.UserSession
+    this.Role = this.ApiService.UserSession.Role;
+    this.UserName = this.ApiService.UserSession.FullName;
 
     this.userForm = this.formbuilder.group({
       UserId: [''],
@@ -34,7 +44,6 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('myModal') myModal!: ElementRef;
   openModal() {
-    //this.userForm.reset()
     const modal = this.myModal.nativeElement;
     modal.classList.add('show');
     modal.style.display = 'block';
@@ -42,6 +51,7 @@ export class HomeComponent implements OnInit {
   }
 
   closeModal() {
+    this.resetForm();
     const modal = this.myModal.nativeElement;
     modal.classList.remove('show');
     modal.style.display = 'none';
@@ -50,6 +60,9 @@ export class HomeComponent implements OnInit {
 
   resetForm() {
     this.userForm.reset();
+    this.FormHeading = 'Add User';
+    this.FormButton = 'Save';
+    this.UserUpdate = null;
   }
 
   GetUserList() {
@@ -59,20 +72,13 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  // Define a variable to store the UserId
   userId: any;
-  selectedIndex: any
-
   editUser(index: any) {
-    // Retrieve the user data from the UserList array based on the index
-    const userData = this.UserList[index];
-
-    // Store the UserId in the userId variable
-    this.userId = userData.UserId;
-
-    // Patch the form with the user data
+    this.FormHeading = 'Update User';
+    this.FormButton = 'Update';
+    let userData = this.UserList[index];
+    this.UserUpdate = userData.UserId;
     this.userForm.patchValue({
-      UserId: userData.UserId,
       FirstName: userData.FirstName,
       LastName: userData.LastName,
       Address: userData.Address,
@@ -82,15 +88,13 @@ export class HomeComponent implements OnInit {
       Password: userData.Password,
       Mobile: userData.Mobile
     });
-
-    // Optionally, you can also store the index for future reference if needed
-    // this.selectedIndex = index;
     this.openModal();
   }
 
   submitForm() {
+    this.userForm.value.UpdateUserId = (this.userForm.value.UpdateUserId == undefined || this.userForm.value.UpdateUserId == '') ? '0' : this.userForm.value.UpdateUserId;
     let requestdata: any = {
-      UserId: this.userId || null, // Include the stored UserId
+      UpdateUserId: this.UserUpdate,
       FirstName: this.userForm.get('FirstName')?.value,
       LastName: this.userForm.get('LastName')?.value,
       Address: this.userForm.get('Address')?.value,
@@ -100,35 +104,39 @@ export class HomeComponent implements OnInit {
       Password: this.userForm.get('Password')?.value,
       Mobile: this.userForm.get('Mobile')?.value,
     };
-    this.ApiService.CallService('/AddUpdateUser', { Request: requestdata }).pipe(first()).subscribe((result: any) => {
+    this.ApiService.CallService('/AddUpdateUser', requestdata).pipe(first()).subscribe((result: any) => {
       if (result && result.status === '1') {
         this.closeModal();
         alert(result.message);
-        this.userForm.reset();
+        this.resetForm()
         this.GetUserList();
-      }
-    });
-  }
-  deleteUser(userId: any) {
-    console.log(userId)
-    let request = {
-      'UserId': userId
-    }
-    console.log(request)
-    this.ApiService.CallService('/DeleteUser', request).pipe(first()).subscribe((result: any) => {
-      if (result && result.status === '1') {
-        alert(result.message); // Optionally, show an alert message
       } else {
-        // If the deletion failed, show an error message
-        alert(result.message || "Failed to delete user");
+        alert(result.message);
       }
-    }, (error: any) => {
-      // If an error occurred during the API call, handle it appropriately
-      console.error("Error deleting user:", error);
-      alert("An error occurred while deleting the user. Please try again later.");
     });
   }
 
+  deleteUser(id: any) {
+    let req = { 'UserId': id };
+    this.ApiService.CallService('/DeleteUser', req).pipe(first()).subscribe(
+      (result: any) => {
+        if (result.status == '1') {
+          this.GetUserList();
+          alert(result.message);
+        } else {
+          alert(result.message);
+        }
+      },
+      (error: any) => {
+        alert('Something went wrong');
+      }
+    );
+  }
 
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login'])
+  }
 
 }
