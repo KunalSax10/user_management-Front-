@@ -31,11 +31,11 @@ export class HomeComponent implements OnInit {
       UserId: [''],
       FirstName: [null, Validators.required],
       LastName: [null, Validators.required],
-      Email: [null, [Validators.required, Validators.email]],
+      Email: [null, [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),]],
       Role: [null, [Validators.required]],
       Address: [null],
       Gender: [null, Validators.required],
-      Mobile: [null, [Validators.required]],
+      Mobile: [null, [Validators.required, Validators.minLength(10)]],
       Password: [null, [Validators.required]],
     })
     this.GetUserList();
@@ -135,6 +135,15 @@ export class HomeComponent implements OnInit {
   logout() {
     localStorage.clear();
     this.router.navigate(['/login'])
+  }
+
+  PressNumber(evt: any) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 
 }
