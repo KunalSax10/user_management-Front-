@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="fullName">First Name<span class="text-danger">*</span></label>
                             <input appNospacefirst appAlphabet type="text" class="form-control"
-                                formControlName="FirstName" id="fullName" placeholder="Enter Full Name"
+                                formControlName="FirstName" id="fullName" placeholder="Enter First Name"
                                 [class.is-invalid]="userForm.controls['FirstName'].invalid && (userForm.controls['FirstName'].dirty || userForm.controls['FirstName'].touched)">
                             <div *ngIf="userForm.controls['FirstName'].invalid && (userForm.controls['FirstName'].dirty || userForm.controls['FirstName'].touched)"
                                 class="text-danger">
