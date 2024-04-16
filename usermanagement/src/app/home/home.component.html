@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="fullName">First Name<span class="text-danger">*</span></label>
                             <input appNospacefirst appAlphabet type="text" class="form-control"
-                                formControlName="FirstName" id="fullName" placeholder="Enter First Name"
+                                formControlName="FirstName" id="FirstName" placeholder="Enter First Name" maxlength="20"
                                 [class.is-invalid]="userForm.controls['FirstName'].invalid && (userForm.controls['FirstName'].dirty || userForm.controls['FirstName'].touched)">
                             <div *ngIf="userForm.controls['FirstName'].invalid && (userForm.controls['FirstName'].dirty || userForm.controls['FirstName'].touched)"
                                 class="text-danger">
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="email">Email<span class="text-danger">*</span></label>
                             <input appNospacefirst type="email" class="form-control" formControlName="Email" id="email"
-                                placeholder="Enter Email"
+                                placeholder="Enter Email" maxlength="50"
                                 [class.is-invalid]="userForm.controls['Email'].invalid && (userForm.controls['Email'].dirty || userForm.controls['Email'].touched)">
                             <div *ngIf="userForm.controls['Email'].invalid && (userForm.controls['Email'].dirty || userForm.controls['Email'].touched)"
                                 class="text-danger">
@@ -75,7 +75,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="LastName">Last Name<span class="text-danger">*</span></label>
-                            <input appNospacefirst appAlphabet type="text" class="form-control"
+                            <input appNospacefirst appAlphabet type="text" class="form-control" maxlength="20"
                                 formControlName="LastName" id="LastName" placeholder="Enter Last Name"
                                 [class.is-invalid]="userForm.controls['LastName'].invalid &&
                                 (userForm.controls['LastName'].dirty || userForm.controls['LastName'].touched)">
@@ -87,7 +87,7 @@
                         </div>
                         <div class="form-group">
                             <label for="address">Address<span class="text-danger">*</span></label>
-                            <input appNospacefirst appAlphabet type="text" class="form-control"
+                            <input appNospacefirst appAlphabet type="text" class="form-control" maxlength="50"
                                 formControlName="Address" id="address" placeholder="Enter Address" [class.is-invalid]="userForm.controls['Address'].invalid &&
                                 (userForm.controls['Address'].dirty || userForm.controls['Address'].touched)">
                             <div *ngIf="userForm.controls['Address'].invalid && (userForm.controls['Address'].dirty || userForm.controls['Address'].touched)"
@@ -99,7 +99,7 @@
                         <div class="form-group">
                             <label for="password">Password<span class="text-danger">*</span></label>
                             <input appNospacefirst type="password" class="form-control" formControlName="Password"
-                                id="password" placeholder="Password" [class.is-invalid]="userForm.controls['Password'].invalid &&
+                                maxlength="20" id="password" placeholder="Password" [class.is-invalid]="userForm.controls['Password'].invalid &&
                                 (userForm.controls['Password'].dirty || userForm.controls['Password'].touched)">
                             <div *ngIf="userForm.controls['Password'].invalid && (userForm.controls['Password'].dirty || userForm.controls['Password'].touched)"
                                 class="text-danger">
